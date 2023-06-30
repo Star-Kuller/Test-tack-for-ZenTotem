@@ -6,18 +6,21 @@ public static class PropertySetter
 {
     public static Employee SetProperties(string argument, Employee employee)
     {
-        switch (argument.Split(':')[0])
+        switch (argument.Split(':')[0].ToLower())
         {
             case "id":
                 break;
-            case "FirstName":
-                employee.FirstName = argument.Replace("FirstName:", "");
+            case "firstname":
+                employee.FirstName = argument.Replace("FirstName:", "",
+                    StringComparison.InvariantCultureIgnoreCase);
                 break;
-            case "LastName":
-                employee.LastName = argument.Replace("LastName:", "");
+            case "lastname":
+                employee.LastName = argument.Replace("LastName:", "",
+                    StringComparison.InvariantCultureIgnoreCase);
                 break;
-            case "Salary":
-                var salary = argument.Replace("Salary:", "");
+            case "salary":
+                var salary = argument.Replace("Salary:", "",
+                    StringComparison.InvariantCultureIgnoreCase);
                 if (!decimal.TryParse(salary, out var d))
                     throw new Exception("Error: Wrong format");
                 employee.Salary = d;

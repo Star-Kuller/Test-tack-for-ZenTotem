@@ -10,6 +10,7 @@ public class DiContainer
     private IRepository _repository;
     private IParser _parser;
     private ICommandRecognizerChain _recognizer;
+    private ITableGenerator _tableGenerator;
 
     // Singleton.
     private DiContainer(){}
@@ -27,7 +28,7 @@ public class DiContainer
     {
 
         _repository = new JsonRepository(configuration["jsonFilePath"]);
-        
+        _tableGenerator = new TableGenerator();
         // Command recognizer chain.
         // It is recommended to set up in from the most rarest team to the frequent.
         var jsonChainLink = new CommandRecognizerChain(
@@ -41,9 +42,9 @@ public class DiContainer
         var updateChainLink = new CommandRecognizerChain(
             new UpdateCommand(_repository), "-update", addChainLink);
         var getAllChainLink = new CommandRecognizerChain(
-            new GetAllCommand(_repository), "-getAll", updateChainLink);
+            new GetAllCommand(_repository, _tableGenerator), "-getAll", updateChainLink);
         _recognizer = new CommandRecognizerChain(
-            new GetCommand(_repository), "-get", getAllChainLink);
+            new GetCommand(_repository, _tableGenerator), "-get", getAllChainLink);
         
         _parser = new Parser(_recognizer);
     }

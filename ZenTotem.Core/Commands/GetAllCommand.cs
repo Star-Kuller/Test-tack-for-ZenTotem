@@ -5,18 +5,17 @@ namespace ZenTotem.Core;
 public class GetAllCommand : ICommand
 {
     private readonly IRepository _repository;
+    private readonly ITableGenerator _tableGenerator;
 
-    public GetAllCommand(IRepository repository)
+    public GetAllCommand(IRepository repository, ITableGenerator tableGenerator)
     {
         _repository = repository;
+        _tableGenerator = tableGenerator;
     }
     
     public void Execute(List<string> arguments)
     {
         var employees = _repository.GetAll();
-        foreach (var employee in employees)
-        { 
-            Console.WriteLine($"ID:{employee.Id} FN:{employee.FirstName} LN:{employee.LastName} S:{employee.Salary}");
-        }
+        Console.WriteLine(_tableGenerator.Create(employees));
     }
 }

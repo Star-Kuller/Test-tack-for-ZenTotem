@@ -10,15 +10,23 @@ public class JsonCommand : ICommand
     {
         if (arguments.Count < 1 || arguments.Count > 2)
             throw new Exception("Error: Wrong number of arguments");
-        if (!arguments[0].Contains("path:"))
+        
+        if (!arguments[0].Contains("path:",
+                StringComparison.InvariantCultureIgnoreCase))
             throw new Exception("Error: Invalid syntax");
-        if (arguments.Count == 2 && !arguments[1].Contains("name:"))
+        
+        if (arguments.Count == 2 && !arguments[1].Contains("name:",
+                StringComparison.InvariantCultureIgnoreCase))
             throw new Exception("Error: Invalid syntax");
-        var path = arguments[0].Replace("path:", "");
+        
+        var path = arguments[0].Replace("path:", "",
+            StringComparison.InvariantCultureIgnoreCase);
         
         
-        if (arguments.Count == 2 && arguments[1].Contains("name:"))
-            path = AddName(path, arguments[1].Replace("name:", ""));
+        if (arguments.Count == 2 && arguments[1].Contains("name:",
+                StringComparison.InvariantCultureIgnoreCase))
+            path = AddName(path, arguments[1].Replace("name:", "",
+                StringComparison.InvariantCultureIgnoreCase));
         
         if (path.Split('.')[^1] != "json")
             path += ".json";

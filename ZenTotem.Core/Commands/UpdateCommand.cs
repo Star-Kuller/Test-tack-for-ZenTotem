@@ -18,7 +18,7 @@ public class UpdateCommand : ICommand
         if (arguments.Count < 2)
             throw new Exception("Error: Wrong number of arguments");
         
-        if (!arguments[0].Contains("id:"))
+        if (!arguments[0].Contains("id:",StringComparison.InvariantCultureIgnoreCase))
             throw new Exception("Error: Invalid syntax");
         
         var allEmployees = _repository.GetAll();
@@ -26,7 +26,8 @@ public class UpdateCommand : ICommand
         if (allEmployees.Count < 1)
             throw new Exception("Error: There are no employees in the file");
 
-        if (!int.TryParse(arguments[0].Replace("id:", ""), out var id))
+        if (!int.TryParse(arguments[0].Replace("id:", "",
+                StringComparison.InvariantCultureIgnoreCase), out var id))
             throw new Exception("Error: Wrong format");
 
         var employee = _repository.Get(id);

@@ -5,7 +5,13 @@ public class HelpCommand : ICommand
     private const string HelpMessage =
         "-help - Prints a list of commands to the console.\n" +
         "-json path:{path} [name:{name}] - Specifies the path to the json file or creates one.\n" +
-        "WIP";
+        "-get id:{id} - Displays employee with id == {id}\n" +
+        "-getAll - Displays all employees" +
+        "-add FirstName:{FirstName} LastName:{LastName} Salary:{Salary} - " +
+        "Add an employee with the specified parameters.\n" +
+        "-delete id:{id} - Delete Employee with id == {id}\n" +
+        "-update id:{id} [FirstName:{FirstName}] [LastName:{LastName}] [Salary:{Salary}]" +
+        " - Update employee information with id == {id}\n";
     public void Execute(List<string> arguments)
     {
         Console.WriteLine(HelpMessage);
