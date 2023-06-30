@@ -1,5 +1,5 @@
+using System.Net;
 using System.Text.Json;
-using System.Text.RegularExpressions;
 
 namespace ZenTotem.Core;
 
@@ -14,8 +14,8 @@ public class JsonCommand : ICommand
         if (arguments.Count == 2 && !arguments[1].Contains("name:"))
             throw new Exception("Error: Invalid syntax");
         var path = arguments[0].Replace("path:", "");
-
-
+        
+        
         if (arguments.Count == 2 && arguments[1].Contains("name:"))
             path = AddName(path, arguments[1].Replace("name:", ""));
         
@@ -23,16 +23,19 @@ public class JsonCommand : ICommand
             path += ".json";
         
         if (!File.Exists(path))
+        {
             File.Create(path).Close();
+            File.WriteAllText(path, "{}");
+        }
 
         UpdatePathInSettings(path);
+        
+        Console.WriteLine($"Selected file by path {path}");
     }
 
     private string AddName(string pathDirectory, string name)
     {
-        if (!Path.Exists(pathDirectory))
-            throw new Exception("Error: Invalid path");
-        if (pathDirectory[^1] == '\\' || pathDirectory[^1] == '/')
+        if (pathDirectory[^1] != '\\' && pathDirectory[^1] != '/')
             pathDirectory += '\\';
         return pathDirectory + name;
     }

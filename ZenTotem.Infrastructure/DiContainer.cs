@@ -23,24 +23,20 @@ public class DiContainer
     
     public IParser GetParser() => _parser;
     
-    public void Configure()
+    public void Configure(IConfigurationRoot configuration)
     {
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
-        var configuration = builder.Build();
 
         _repository = new JsonRepository(configuration["jsonFilePath"]);
         
         // Command recognizer chain.
-        _recognizer = new CommandRecognizerChain(
-            new JsonCommand(),"-json");
+        // It is recommended to set up in from the most rarest team to the frequent.
+        var jsonChainLink = new CommandRecognizerChain(
+            new JsonCommand(),"-json", null);
         var helpChainLink = new CommandRecognizerChain(
-            new HelpCommand(),"-help");
+            new HelpCommand(),"-help", jsonChainLink);
+        _recognizer = new CommandRecognizerChain(
+            new AddCommand(_repository),"-add", helpChainLink);
         
-        // Set the order of checks. It is recommended to set up in from the most frequent team to the rarest.
-        _recognizer.SetNextChainLink(helpChainLink);
-
         _parser = new Parser(_recognizer);
     }
 }

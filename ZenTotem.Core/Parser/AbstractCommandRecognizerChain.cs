@@ -4,12 +4,11 @@ public class AbstractCommandRecognizerChain : ICommandRecognizerChain
 {
     private ICommandRecognizerChain? _nextChainLink;
 
-    public ICommandRecognizerChain SetNextChainLink(ICommandRecognizerChain chainLink)
+    public AbstractCommandRecognizerChain(ICommandRecognizerChain? nextChainLink)
     {
-        _nextChainLink = chainLink;
-        return _nextChainLink;
+        _nextChainLink = nextChainLink;
     }
-    
+
     public virtual ICommand ReturnCommand(string inputString)
     {
         if (_nextChainLink is null)

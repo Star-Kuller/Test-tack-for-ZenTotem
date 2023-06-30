@@ -5,10 +5,10 @@ public class CommandRecognizerChain : AbstractCommandRecognizerChain
     private readonly ICommand _returnCommand;
     private readonly string _commandName;
 
-    public CommandRecognizerChain(ICommand returnCommand, string commandName)
+    public CommandRecognizerChain(ICommand returnCommand, string commandName, ICommandRecognizerChain? nextChainLink) : base(nextChainLink)
     {
         _returnCommand = returnCommand;
-        _commandName = commandName;
+        _commandName = commandName.ToLower();
     }
 
     public override ICommand ReturnCommand(string commandName)

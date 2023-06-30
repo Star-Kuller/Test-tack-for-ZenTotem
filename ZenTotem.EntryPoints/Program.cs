@@ -1,4 +1,5 @@
-﻿using ZenTotem.Core;
+﻿using Microsoft.Extensions.Configuration;
+using ZenTotem.Core;
 using ZenTotem.Infrastructure;
 
 if (!File.Exists("appsettings.json"))
@@ -11,8 +12,13 @@ if (!File.Exists("appsettings.json"))
     }
 }
 
+var builder = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json");
+var configuration = builder.Build();
+
 var diContainer = DiContainer.GetContainer();
-diContainer.Configure();
+diContainer.Configure(configuration);
 
 IParser parser = diContainer.GetParser();
 parser.Parse(args);

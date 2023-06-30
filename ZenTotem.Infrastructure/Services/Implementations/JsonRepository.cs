@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using ZenTotem.Core.Entities;
 using System.Text.Json;
 
@@ -6,7 +5,7 @@ namespace ZenTotem.Infrastructure;
 
 public class JsonRepository : IRepository
 {
-    private string _jsonPath;
+    private readonly string _jsonPath;
 
     public JsonRepository(string jsonPath)
     {
