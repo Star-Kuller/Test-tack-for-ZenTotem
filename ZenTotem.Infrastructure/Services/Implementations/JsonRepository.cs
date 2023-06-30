@@ -19,20 +19,30 @@ public class JsonRepository : IRepository
         Serialize(employees);
     }
 
+    public void Update(Employee employee)
+    {
+        var employees = Deserialize() ?? new List<Employee>();
+        var oldEmployee = employees.FirstOrDefault(e => e.Id == employee.Id)
+                          ?? throw new Exception("Error: Employee not found");;
+        employees.Remove(oldEmployee);
+        employees.Add(employee);
+        Serialize(employees);
+    }
+
     public void Delete(int id)
     {
-        var employees = Deserialize() ?? throw new Exception("Error: File is empty");
-        var employeeCollection = from e in employees
-            where e.Id == id
-            select e;
-        var employee = employeeCollection.FirstOrDefault() ?? throw new Exception("Error: Employee not found");
+        var employees = Deserialize()
+                        ?? throw new Exception("Error: File is empty");
+        var employee = employees.FirstOrDefault(e => e.Id == id)
+                       ?? throw new Exception("Error: Employee not found");
         employees.Remove(employee);
         Serialize(employees);
     }
 
     public Employee Get(int id)
     {
-        var employees = Deserialize() ?? throw new Exception("Error: File is empty");
+        var employees = Deserialize()
+                        ?? throw new Exception("Error: File is empty");
         var employee = from e in employees
             where e.Id == id
             select e;

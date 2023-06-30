@@ -4,7 +4,7 @@ namespace ZenTotem.Core;
 
 public class GetCommand : ICommand
 {
-    private IRepository _repository;
+    private readonly IRepository _repository;
 
     public GetCommand(IRepository repository)
     {

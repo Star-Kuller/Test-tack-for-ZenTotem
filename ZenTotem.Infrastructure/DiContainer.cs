@@ -36,10 +36,12 @@ public class DiContainer
             new HelpCommand(),"-help", jsonChainLink);
         var deleteChainLink = new CommandRecognizerChain(
             new DeleteCommand(_repository), "-delete", helpChainLink);
-        var addChainLink= new CommandRecognizerChain(
+        var addChainLink = new CommandRecognizerChain(
             new AddCommand(_repository),"-add", deleteChainLink);
+        var updateChainLink = new CommandRecognizerChain(
+            new UpdateCommand(_repository), "-update", addChainLink);
         var getAllChainLink = new CommandRecognizerChain(
-            new GetAllCommand(_repository), "-getAll", addChainLink);
+            new GetAllCommand(_repository), "-getAll", updateChainLink);
         _recognizer = new CommandRecognizerChain(
             new GetCommand(_repository), "-get", getAllChainLink);
         
