@@ -34,8 +34,10 @@ public class DiContainer
             new JsonCommand(),"-json", null);
         var helpChainLink = new CommandRecognizerChain(
             new HelpCommand(),"-help", jsonChainLink);
+        var deleteChainLink = new CommandRecognizerChain(
+            new DeleteCommand(_repository), "-delete", helpChainLink);
         _recognizer = new CommandRecognizerChain(
-            new AddCommand(_repository),"-add", helpChainLink);
+            new AddCommand(_repository),"-add", deleteChainLink);
         
         _parser = new Parser(_recognizer);
     }

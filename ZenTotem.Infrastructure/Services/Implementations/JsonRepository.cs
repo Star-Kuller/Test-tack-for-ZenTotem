@@ -12,23 +12,27 @@ public class JsonRepository : IRepository
         _jsonPath = jsonPath;
     }
 
-    public async Task AsyncAdd(Employee employee)
+    public void Add(Employee employee)
     {
-        var employees = await Deserialize() ?? new List<Employee>();
+        var employees = Deserialize() ?? new List<Employee>();
         employees.Add(employee);
-        await Serialize(employees);
+        Serialize(employees);
     }
 
-    public async Task AsyncDelete(Employee employee)
+    public void Delete(int id)
     {
-        var employees = await Deserialize() ?? throw new Exception("Error: File is empty");
+        var employees = Deserialize() ?? throw new Exception("Error: File is empty");
+        var employeeCollection = from e in employees
+            where e.Id == id
+            select e;
+        var employee = employeeCollection.FirstOrDefault() ?? throw new Exception("Error: Employee not found");
         employees.Remove(employee);
-        await Serialize(employees);
+        Serialize(employees);
     }
 
-    public async Task<Employee> AsyncGet(int id)
+    public Employee Get(int id)
     {
-        var employees = await Deserialize() ?? throw new Exception("Error: File is empty");
+        var employees = Deserialize() ?? throw new Exception("Error: File is empty");
         var employee = from e in employees
             where e.Id == id
             select e;
@@ -37,26 +41,26 @@ public class JsonRepository : IRepository
         return employee.First();
     }
 
-    public async Task<List<Employee>> AsyncGetAll()
+    public List<Employee> GetAll()
     {
-        return await Deserialize() ?? throw new Exception("Error: File is empty");
+        return Deserialize() ?? throw new Exception("Error: File is empty");
     }
 
     
     
-    private async Task<List<Employee>?> Deserialize()
+    private List<Employee>? Deserialize()
     {
         using (FileStream fs = new FileStream(_jsonPath, FileMode.OpenOrCreate))
         {
-            return await JsonSerializer.DeserializeAsync<List<Employee>>(fs);
+            return JsonSerializer.Deserialize<List<Employee>>(fs);
         }
     }
     
-    private async Task Serialize(List<Employee> employees)
+    private void Serialize(List<Employee> employees)
     {
-        using (FileStream fs = new FileStream(_jsonPath, FileMode.Create))
+        using (FileStream fs = new FileStream(_jsonPath, FileMode.Truncate))
         {
-            await JsonSerializer.SerializeAsync(fs, employees);
+            JsonSerializer.Serialize(fs, employees);
         }
     }
 }

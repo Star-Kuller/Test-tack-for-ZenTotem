@@ -9,6 +9,7 @@ public class Employee
         if (id < 0)
             throw new Exception("Error: Id cannot be less than 0");
         Id = id;
+        Salary = 0;
     }
 
     [NotNull]
@@ -18,7 +19,10 @@ public class Employee
 
     public decimal Salary
     {
-        get => Salary;
-        set => Salary = value >= 0 ? value : 0;
+        get => _salary;
+        set => _salary = value >= 0 ? value : 0;
+
     }
+
+    private decimal _salary;
 }

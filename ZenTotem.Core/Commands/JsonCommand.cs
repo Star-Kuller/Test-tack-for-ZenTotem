@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using ZenTotem.Core.Entities;
 
 namespace ZenTotem.Core;
 
@@ -25,7 +26,8 @@ public class JsonCommand : ICommand
         if (!File.Exists(path))
         {
             File.Create(path).Close();
-            File.WriteAllText(path, "{}");
+            string newJson = JsonSerializer.Serialize(new List<Employee>());
+            File.WriteAllText(path, newJson);
         }
 
         UpdatePathInSettings(path);

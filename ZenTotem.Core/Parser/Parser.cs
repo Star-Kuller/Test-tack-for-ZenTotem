@@ -23,7 +23,6 @@ public class Parser : IParser
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
         }
     }
 }
