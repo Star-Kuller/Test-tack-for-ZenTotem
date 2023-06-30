@@ -13,6 +13,10 @@ public class GetAllCommand : ICommand
     
     public void Execute(List<string> arguments)
     {
-        Console.WriteLine();
+        var employees = _repository.GetAll();
+        foreach (var employee in employees)
+        { 
+            Console.WriteLine($"ID:{employee.Id} FN:{employee.FirstName} LN:{employee.LastName} S:{employee.Salary}");
+        }
     }
 }

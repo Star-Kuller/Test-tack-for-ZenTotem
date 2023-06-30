@@ -26,28 +26,35 @@ public class AddCommand : ICommand
 
         foreach (var argument in arguments)
         {
-            switch (argument.Split(':')[0])
-            {
-                case "FirstName":
-                    employee.FirstName = argument.Replace("FirstName:", "");
-                    break;
-                case "LastName":
-                    employee.LastName = argument.Replace("LastName:", "");
-                    break;
-                case "Salary":
-                    var salary = argument.Replace("Salary:", "");
-                    if (!decimal.TryParse(salary, out var d))
-                        throw new Exception("Error: Wrong format");
-                    employee.Salary = d;
-                    break;
-                default:
-                    throw new Exception("Error: Unknown property");
-            }
+            employee = SetProperties(argument, employee);
         }
 
         if (string.IsNullOrEmpty(employee.FirstName))
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Add(employee);
+    }
+
+    private Employee SetProperties(string argument, Employee employee)
+    {
+        switch (argument.Split(':')[0])
+        {
+            case "FirstName":
+                employee.FirstName = argument.Replace("FirstName:", "");
+                break;
+            case "LastName":
+                employee.LastName = argument.Replace("LastName:", "");
+                break;
+            case "Salary":
+                var salary = argument.Replace("Salary:", "");
+                if (!decimal.TryParse(salary, out var d))
+                    throw new Exception("Error: Wrong format");
+                employee.Salary = d;
+                break;
+            default:
+                throw new Exception("Error: Unknown property");
+        }
+
+        return employee;
     }
 }
