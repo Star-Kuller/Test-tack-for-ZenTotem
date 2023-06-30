@@ -4,13 +4,9 @@ public class Parser : IParser
 {
     private readonly ICommandRecognizerChain _recognizer;
 
-    public Parser()
+    public Parser(ICommandRecognizerChain recognizer)
     {
-        // Creating a command recognizer chain.
-        _recognizer = new CommandRecognizerChain(
-            new JsonCommand(),"-json");
-        var deleteChainLink = new CommandRecognizerChain(
-            new HelpCommand(),"-help");
+        _recognizer = recognizer;
     }
     
     public void Parse(string[] inputArguments)

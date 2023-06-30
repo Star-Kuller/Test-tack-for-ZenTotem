@@ -6,22 +6,7 @@ namespace ZenTotem.Infrastructure;
 
 public class JsonRepository : IRepository
 {
-    private const string PathValidation = @"^(?:[\w]\:|\\)(\\[\w.]+)+$";
     private string _jsonPath;
-    public string JsonPath
-    {
-        set
-        {
-            if (Regex.IsMatch(value, PathValidation))
-            {
-                _jsonPath = value;
-            }
-            else
-            {
-                throw new Exception("Error: Invalid path");
-            }
-        }
-    }
 
     public JsonRepository(string jsonPath)
     {
@@ -30,21 +15,21 @@ public class JsonRepository : IRepository
 
     public async Task AsyncAdd(Employee employee)
     {
-        var employees = await Deserialize();
+        var employees = await Deserialize() ?? new List<Employee>();
         employees.Add(employee);
-        Serialize(employees);
+        await Serialize(employees);
     }
 
     public async Task AsyncDelete(Employee employee)
     {
-        var employees = await Deserialize();
+        var employees = await Deserialize() ?? throw new Exception("Error: File is empty");
         employees.Remove(employee);
-        Serialize(employees);
+        await Serialize(employees);
     }
 
     public async Task<Employee> AsyncGet(int id)
     {
-        var employees = await Deserialize();
+        var employees = await Deserialize() ?? throw new Exception("Error: File is empty");
         var employee = from e in employees
             where e.Id == id
             select e;
@@ -55,17 +40,16 @@ public class JsonRepository : IRepository
 
     public async Task<List<Employee>> AsyncGetAll()
     {
-        return await Deserialize();
+        return await Deserialize() ?? throw new Exception("Error: File is empty");
     }
 
     
     
-    private async Task<List<Employee>> Deserialize()
+    private async Task<List<Employee>?> Deserialize()
     {
         using (FileStream fs = new FileStream(_jsonPath, FileMode.OpenOrCreate))
         {
-            return await JsonSerializer.DeserializeAsync<List<Employee>>(fs) 
-                   ?? throw new Exception("Error: file does not match json file");
+            return await JsonSerializer.DeserializeAsync<List<Employee>>(fs);
         }
     }
     
