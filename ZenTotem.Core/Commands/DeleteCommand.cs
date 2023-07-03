@@ -5,10 +5,12 @@ namespace ZenTotem.Core;
 public class DeleteCommand : ICommand
 {
     private readonly IRepository _repository;
+    private readonly IOutput _output;
 
-    public DeleteCommand(IRepository repository)
+    public DeleteCommand(IRepository repository, IOutput output)
     {
         _repository = repository;
+        _output = output;
     }
     
     public void Execute(List<string> arguments)
@@ -27,5 +29,6 @@ public class DeleteCommand : ICommand
             throw new Exception("Error: Wrong id format");
         
         _repository.Delete(deleteId);
+        _output.Send($"Deleted employee {deleteId}");
     }
 }

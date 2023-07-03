@@ -7,10 +7,12 @@ namespace ZenTotem.Core;
 public class UpdateCommand : ICommand
 {
     private readonly IRepository _repository;
+    private readonly IOutput _output;
 
-    public UpdateCommand(IRepository repository)
+    public UpdateCommand(IRepository repository, IOutput output)
     {
         _repository = repository;
+        _output = output;
     }
 
     public void Execute(List<string> arguments)
@@ -41,5 +43,6 @@ public class UpdateCommand : ICommand
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Update(employee);
+        _output.Send($"Updated {employee.Id}");
     }
 }

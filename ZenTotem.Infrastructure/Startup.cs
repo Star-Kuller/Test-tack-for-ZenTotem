@@ -33,6 +33,7 @@ public class Startup
             .AddSingleton<IParser, Parser>()
             .AddTransient<IOutputFormatter, TableGenerator>()
             .AddTransient<IErrorHandler, ErrorHandler>()
+            .AddTransient<IOutput, OutputToConsole>()
             .AddTransient<HelpCommand>()
             .AddTransient<JsonCommand>()
             .AddTransient<AddCommand>()

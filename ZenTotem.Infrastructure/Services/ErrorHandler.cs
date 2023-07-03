@@ -3,13 +3,15 @@ namespace ZenTotem.Infrastructure;
 public class ErrorHandler : IErrorHandler
 {
     private readonly ILogger? _logger;
+    private readonly IOutput _output;
 
-    public ErrorHandler(ILogger logger)
+    public ErrorHandler(ILogger logger, IOutput output)
     {
         _logger = logger;
+        _output = output;
     }
 
-    public string HandleError(Exception ex, string message)
+    public void HandleError(Exception ex, string message)
     {
         var returnedMessage = "";
         
@@ -42,7 +44,8 @@ public class ErrorHandler : IErrorHandler
             returnedMessage = Unrecognized(message);
         if(_logger is not null) 
             _logger.LogError(ex, message);
-        return returnedMessage;
+        
+        _output.Send(returnedMessage);
     }
 
     private string FileEmpty() => "Nothing found in file.";

@@ -6,10 +6,12 @@ namespace ZenTotem.Core;
 public class AddCommand : ICommand
 {
     private readonly IRepository _repository;
+    private readonly IOutput _output;
 
-    public AddCommand(IRepository repository)
+    public AddCommand(IRepository repository, IOutput output)
     {
         _repository = repository;
+        _output = output;
     }
 
     public void Execute(List<string> arguments)
@@ -34,5 +36,6 @@ public class AddCommand : ICommand
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Add(employee);
+        _output.Send($"Added Added employee {employee.Id}");
     }
 }

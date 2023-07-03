@@ -8,7 +8,7 @@ public class JsonRepository : IRepository
     public string JsonPath { get; set; }
     private readonly ILogger? _logger;
 
-    public JsonRepository(ILogger logger)
+    public JsonRepository(ILogger? logger)
     {
         _logger = logger;
     }

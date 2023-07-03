@@ -6,11 +6,13 @@ public class GetCommand : ICommand
 {
     private readonly IRepository _repository;
     private readonly IOutputFormatter _outputFormatter;
+    private readonly IOutput _output;
 
-    public GetCommand(IRepository repository, IOutputFormatter outputFormatter)
+    public GetCommand(IRepository repository, IOutputFormatter outputFormatter, IOutput output)
     {
         _repository = repository;
         _outputFormatter = outputFormatter;
+        _output = output;
     }
     
     public void Execute(List<string> arguments)
@@ -25,7 +27,7 @@ public class GetCommand : ICommand
         
         var employee = _repository.Get(id);
         
-        Console.WriteLine(_outputFormatter.CreateForOneObject(employee));
-
+        var returned = _outputFormatter.CreateForOneObject(employee);
+        _output.Send(returned);
     }
 }

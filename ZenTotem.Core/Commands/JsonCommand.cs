@@ -1,11 +1,18 @@
-using System.Net;
 using System.Text.Json;
 using ZenTotem.Core.Entities;
+using ZenTotem.Infrastructure;
 
 namespace ZenTotem.Core;
 
 public class JsonCommand : ICommand
 {
+    private readonly IOutput _output;
+
+    public JsonCommand(IOutput output)
+    {
+        _output = output;
+    }
+
     public void Execute(List<string> arguments)
     {
         if (arguments.Count < 1 || arguments.Count > 2)
@@ -40,7 +47,7 @@ public class JsonCommand : ICommand
 
         UpdatePathInSettings(path);
         
-        Console.WriteLine($"Selected file by path {path}");
+        _output.Send($"Selected file by path {path}");
     }
 
     private string AddName(string pathDirectory, string name)

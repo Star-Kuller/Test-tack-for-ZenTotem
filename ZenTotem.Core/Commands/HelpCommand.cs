@@ -1,7 +1,16 @@
+using ZenTotem.Infrastructure;
+
 namespace ZenTotem.Core;
 
 public class HelpCommand : ICommand
 {
+    private readonly IOutput _output;
+
+    public HelpCommand(IOutput output)
+    {
+        _output = output;
+    }
+
     private const string HelpMessage =
         "-help - Prints a list of commands to the console.\n" +
         "-json path:{path} [name:{name}] - Specifies the path to the json file or creates one.\n" +
@@ -14,6 +23,6 @@ public class HelpCommand : ICommand
         " - Update employee information with id == {id}\n";
     public void Execute(List<string> arguments)
     {
-        Console.WriteLine(HelpMessage);
+        _output.Send(HelpMessage);
     }
 }
