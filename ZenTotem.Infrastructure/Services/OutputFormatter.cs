@@ -3,12 +3,14 @@ using System.Text;
 namespace ZenTotem.Infrastructure;
 public class OutputFormatter : IOutputFormatter
 {
+    
+    // TO DO Отрефакторить этот класс
     private const int ColumnWidthForOneObject = 14;
     private const int ColumnWidth = 15;
     private const int SplitStick = 1;
     private const int Space = 1;
 
-    public string Create<T>(List<T> list)
+    public string CreateForList<T>(List<T> list)
     {
         var sb = new StringBuilder(200);
         var lineWidth = typeof(T).GetProperties().Length * (ColumnWidth + Space + SplitStick);
@@ -69,22 +71,55 @@ public class OutputFormatter : IOutputFormatter
         return sb.ToString();
     }
     
-    public string CreateForOneRow<T>(T tObject)
+    public string CreateForOneObject<T>(T tObject)
     {
         var sb = new StringBuilder(200);
         sb.AppendLine(new string('-', (ColumnWidthForOneObject + Space * 2) * 2 + SplitStick * 3));
 
         foreach (var field in typeof(T).GetProperties())
         {
-            
-            sb.AppendLine($"| {field.Name,-ColumnWidthForOneObject} | {field.GetValue(tObject)?.ToString()
-                                                                      ?? string.Empty,-ColumnWidthForOneObject} |");
+            if (field.Name.Length > ColumnWidthForOneObject)
+            {
+                sb.Append($"| {field.Name.Substring(0, ColumnWidthForOneObject - 3)}...");
+            }
+            else
+            {
+                sb.Append($"| {field.Name,-ColumnWidthForOneObject} ");
+            }
+            if ((field.GetValue(tObject)?.ToString()
+                 ?? string.Empty).Length > ColumnWidthForOneObject)
+            {
+                sb.AppendLine($"| {(field.GetValue(tObject)?.ToString()
+                                ?? string.Empty).Substring(0, ColumnWidthForOneObject - 3)}... |");
+            }
+            else
+            {
+                sb.AppendLine($"| {field.GetValue(tObject)?.ToString()
+                                   ?? string.Empty,-ColumnWidthForOneObject} |");
+            }
         }
 
         foreach (var field in typeof(T).GetFields())
         {
-            sb.AppendLine($"| {field.Name,-ColumnWidthForOneObject} | {field.GetValue(tObject)?.ToString()
-                                                                       ?? string.Empty,-ColumnWidthForOneObject} |");
+            if (field.Name.Length > ColumnWidthForOneObject)
+            {
+                sb.Append($"| {field.Name.Substring(0, ColumnWidthForOneObject - 3)}...");
+            }
+            else
+            {
+                sb.AppendLine($"| {field.Name,-ColumnWidthForOneObject} ");
+            }
+            if ((field.GetValue(tObject)?.ToString()
+                 ?? string.Empty).Length > ColumnWidthForOneObject)
+            {
+                sb.AppendLine($"| {(field.GetValue(tObject)?.ToString()
+                                ?? string.Empty).Substring(0, ColumnWidthForOneObject - 3)}... |");
+            }
+            else
+            {
+                sb.AppendLine($"| {field.GetValue(tObject)?.ToString()
+                                   ?? string.Empty,-ColumnWidthForOneObject} |");
+            }
         }
     
         sb.AppendLine(new string('-', (ColumnWidthForOneObject + Space * 2) * 2 + SplitStick * 3));

@@ -5,6 +5,6 @@ namespace ZenTotem.Infrastructure;
 
 public interface IOutputFormatter
 {
-    public string Create<T>(List<T> list);
-    public string CreateForOneRow<T>(T employee);
+    public string CreateForList<T>(List<T> list);
+    public string CreateForOneObject<T>(T employee);
 }

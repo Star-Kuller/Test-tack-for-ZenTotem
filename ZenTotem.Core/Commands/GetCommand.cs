@@ -25,7 +25,7 @@ public class GetCommand : ICommand
         
         var employee = _repository.Get(id);
         
-        Console.WriteLine(_outputFormatter.CreateForOneRow(employee));
+        Console.WriteLine(_outputFormatter.CreateForOneObject(employee));
 
     }
 }

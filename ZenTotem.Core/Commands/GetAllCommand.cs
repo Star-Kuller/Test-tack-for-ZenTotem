@@ -16,6 +16,6 @@ public class GetAllCommand : ICommand
     public void Execute(List<string> arguments)
     {
         var employees = _repository.GetAll();
-        Console.WriteLine(_outputFormatter.Create(employees));
+        Console.WriteLine(_outputFormatter.CreateForList(employees));
     }
 }
