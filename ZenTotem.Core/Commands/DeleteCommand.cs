@@ -21,10 +21,10 @@ public class DeleteCommand : ICommand
         var allEmployees = _repository.GetAll();
 
         if (allEmployees.Count < 1)
-            throw new Exception("Error: There are no employees in the file");
+            throw new Exception("Error: No employees in the file");
 
         if (!int.TryParse(arguments[0].Replace("id:", ""), out var deleteId))
-            throw new Exception("Error: Wrong format");
+            throw new Exception("Error: Wrong id format");
         
         _repository.Delete(deleteId);
     }

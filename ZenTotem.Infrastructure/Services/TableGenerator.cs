@@ -1,7 +1,7 @@
 using System.Text;
 
 namespace ZenTotem.Infrastructure;
-public class OutputFormatter : IOutputFormatter
+public class TableGenerator : IOutputFormatter
 {
     
     // TO DO Отрефакторить этот класс

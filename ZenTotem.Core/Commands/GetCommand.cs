@@ -21,7 +21,7 @@ public class GetCommand : ICommand
             throw new Exception("Error: Invalid syntax");
         
         if (!int.TryParse(arguments[0].Replace("id:", ""), out var id))
-            throw new Exception("Error: Wrong format");
+            throw new Exception("Error: Wrong id format");
         
         var employee = _repository.Get(id);
         

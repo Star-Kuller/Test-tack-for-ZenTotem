@@ -5,11 +5,12 @@ namespace ZenTotem.Infrastructure;
 
 public class JsonRepository : IRepository
 {
-    private readonly string _jsonPath;
+    public string JsonPath { get; set; }
+    private readonly ILogger? _logger;
 
-    public JsonRepository(string jsonPath)
+    public JsonRepository(ILogger logger)
     {
-        _jsonPath = jsonPath;
+        _logger = logger;
     }
     
     public void Add(Employee employee)
@@ -17,6 +18,8 @@ public class JsonRepository : IRepository
         var employees = Deserialize() ?? new List<Employee>();
         employees.Add(employee);
         Serialize(employees);
+        if (_logger is not null)
+            _logger.LogInfo($"Added employee: {employee.Id}");
     }
 
     public void Update(Employee employee)
@@ -27,6 +30,8 @@ public class JsonRepository : IRepository
         employees.Remove(oldEmployee);
         employees.Add(employee);
         Serialize(employees);
+        if (_logger is not null)
+            _logger.LogInfo($"Updated employee: {employee.Id}");
     }
 
     public void Delete(int id)
@@ -37,6 +42,8 @@ public class JsonRepository : IRepository
                        ?? throw new Exception("Error: Employee not found");
         employees.Remove(employee);
         Serialize(employees);
+        if (_logger is not null)
+            _logger.LogInfo($"Removed employee: {employee.Id}");
     }
 
     public Employee Get(int id)
@@ -60,7 +67,7 @@ public class JsonRepository : IRepository
     
     private List<Employee>? Deserialize()
     {
-        using (FileStream fs = new FileStream(_jsonPath, FileMode.OpenOrCreate))
+        using (FileStream fs = new FileStream(JsonPath, FileMode.OpenOrCreate))
         {
             return JsonSerializer.Deserialize<List<Employee>>(fs);
         }
@@ -68,7 +75,7 @@ public class JsonRepository : IRepository
     
     private void Serialize(List<Employee> employees)
     {
-        using (FileStream fs = new FileStream(_jsonPath, FileMode.Truncate))
+        using (FileStream fs = new FileStream(JsonPath, FileMode.Truncate))
         {
             JsonSerializer.Serialize(fs, employees);
         }

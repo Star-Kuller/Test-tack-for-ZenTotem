@@ -22,7 +22,7 @@ public static class PropertySetter
                 var salary = argument.Replace("Salary:", "",
                     StringComparison.InvariantCultureIgnoreCase);
                 if (!decimal.TryParse(salary, out var d))
-                    throw new Exception("Error: Wrong format");
+                    throw new Exception("Error: Wrong decimal format");
                 employee.Salary = d;
                 break;
             default:

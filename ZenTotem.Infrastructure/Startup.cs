@@ -29,10 +29,10 @@ public class Startup
             }
         }
         var service = new ServiceCollection()
-            .AddSingleton<IRepository>(jr => 
-                new JsonRepository(configuration["jsonFilePath"]))
+            .AddSingleton<IRepository, JsonRepository>()
             .AddSingleton<IParser, Parser>()
-            .AddTransient<IOutputFormatter, OutputFormatter>()
+            .AddTransient<IOutputFormatter, TableGenerator>()
+            .AddTransient<IErrorHandler, ErrorHandler>()
             .AddTransient<HelpCommand>()
             .AddTransient<JsonCommand>()
             .AddTransient<AddCommand>()
@@ -41,6 +41,8 @@ public class Startup
             .AddTransient<GetAllCommand>()
             .AddTransient<UpdateCommand>()
             .BuildServiceProvider();
+        
+        service.GetService<JsonRepository>().JsonPath = configuration["jsonFilePath"];
         
         var dictionaryCommands = new Dictionary<string, ICommand>
         {
