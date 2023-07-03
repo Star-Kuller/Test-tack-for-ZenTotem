@@ -5,17 +5,17 @@ namespace ZenTotem.Core;
 public class GetAllCommand : ICommand
 {
     private readonly IRepository _repository;
-    private readonly ITableGenerator _tableGenerator;
+    private readonly IOutputFormatter _outputFormatter;
 
-    public GetAllCommand(IRepository repository, ITableGenerator tableGenerator)
+    public GetAllCommand(IRepository repository, IOutputFormatter outputFormatter)
     {
         _repository = repository;
-        _tableGenerator = tableGenerator;
+        _outputFormatter = outputFormatter;
     }
     
     public void Execute(List<string> arguments)
     {
         var employees = _repository.GetAll();
-        Console.WriteLine(_tableGenerator.Create(employees));
+        Console.WriteLine(_outputFormatter.Create(employees));
     }
 }

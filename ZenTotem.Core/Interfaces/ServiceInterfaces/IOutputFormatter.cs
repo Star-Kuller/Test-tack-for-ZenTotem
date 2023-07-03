@@ -3,7 +3,7 @@ using ZenTotem.Core.Entities;
 
 namespace ZenTotem.Infrastructure;
 
-public interface ITableGenerator
+public interface IOutputFormatter
 {
     public string Create<T>(List<T> list);
     public string CreateForOneRow<T>(T employee);

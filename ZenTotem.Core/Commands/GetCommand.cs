@@ -5,12 +5,12 @@ namespace ZenTotem.Core;
 public class GetCommand : ICommand
 {
     private readonly IRepository _repository;
-    private readonly ITableGenerator _tableGenerator;
+    private readonly IOutputFormatter _outputFormatter;
 
-    public GetCommand(IRepository repository, ITableGenerator tableGenerator)
+    public GetCommand(IRepository repository, IOutputFormatter outputFormatter)
     {
         _repository = repository;
-        _tableGenerator = tableGenerator;
+        _outputFormatter = outputFormatter;
     }
     
     public void Execute(List<string> arguments)
@@ -25,7 +25,7 @@ public class GetCommand : ICommand
         
         var employee = _repository.Get(id);
         
-        Console.WriteLine(_tableGenerator.CreateForOneRow(employee));
+        Console.WriteLine(_outputFormatter.CreateForOneRow(employee));
 
     }
 }

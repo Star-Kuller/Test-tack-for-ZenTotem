@@ -1,7 +1,7 @@
 using System.Text;
 
 namespace ZenTotem.Infrastructure;
-public class TableGenerator : ITableGenerator
+public class OutputFormatter : IOutputFormatter
 {
     private const int ColumnWidthForOneObject = 14;
     private const int ColumnWidth = 15;

@@ -2,5 +2,6 @@ namespace ZenTotem.Core;
 
 public interface IParser
 {
-    public void Parse(string[] arguments);
+    public Dictionary<string, ICommand> DictionaryCommands { get; set; }
+    public ICommand Parse(string[] arguments);
 }
