@@ -1,16 +1,22 @@
 using ZenTotem.Core.Entities;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace ZenTotem.Infrastructure;
 
 public class JsonRepository : IRepository
 {
-    public string JsonPath { get; set; }
+    public string JsonPath;
     private readonly ILogger? _logger;
 
-    public JsonRepository(ILogger? logger)
+    public JsonRepository(ILogger? logger = null)
     {
         _logger = logger;
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+        var configuration = builder.Build();
+        JsonPath = configuration["jsonFilePath"];
     }
     
     public void Add(Employee employee)

@@ -1,72 +1,35 @@
+using System.Reflection;
 using System.Text;
 
 namespace ZenTotem.Infrastructure;
 public class TableGenerator : IOutputFormatter
 {
     
-    // TO DO Отрефакторить этот класс
-    private const int ColumnWidthForOneObject = 14;
-    private const int ColumnWidth = 15;
-    private const int SplitStick = 1;
-    private const int Space = 1;
+    public const int ColumnWidthForOneObject = 14;
+    public const int ColumnWidth = 15;
+    public const int SeparatorStick = 1;
+    public const int Space = 1;
 
     public string CreateForList<T>(List<T> list)
     {
         var sb = new StringBuilder(200);
-        var lineWidth = typeof(T).GetProperties().Length * (ColumnWidth + Space + SplitStick);
-        lineWidth += typeof(T).GetFields().Length * (ColumnWidth + Space + SplitStick);
-        lineWidth += SplitStick;
+        var lineWidth = GetWidthForList<T>();
         sb.AppendLine(new string('-', lineWidth));
-
-        foreach (var field in typeof(T).GetProperties())
-        {
-            if (field.Name.Length > ColumnWidth)
-            {
-                sb.Append($"| {field.Name.Substring(0, ColumnWidth - 3)}...");
-                continue;
-            }
-            sb.Append($"| {field.Name, -ColumnWidth}");
-        }
-        foreach (var field in typeof(T).GetFields())
-        {
-            if (field.Name.Length > ColumnWidth)
-            {
-                sb.Append($"| {field.Name.Substring(0, ColumnWidth - 3)}...");
-                continue;
-            }
-            sb.Append($"| {field.Name, -ColumnWidth}");
-        }
-        sb.Append("|\n|");
-        sb.Append(new string('-', lineWidth-2));
-        sb.AppendLine("|");
+        sb.AppendLine(CreateHeaders<T>());
+        
+        // Headers separator.
+        var sepChars = new char[lineWidth - 2]; // leave two char for the column separator.
+        Array.Fill(sepChars, '-');
+        sb.AppendLine($"|{new string(sepChars)}|");
+        
+        // Create rows.
         foreach (var obj in list)
         {
-            foreach (var field in typeof(T).GetProperties())
-            {
-                if ((field.GetValue(obj)?.ToString()
-                     ?? string.Empty).Length > ColumnWidth)
-                {
-                    sb.Append($"| {(field.GetValue(obj)?.ToString()
-                                  ?? string.Empty).Substring(0, ColumnWidth - 3)}...");
-                    continue;
-                }
-                sb.Append($"| {field.GetValue(obj)?.ToString()
-                              ?? string.Empty, -ColumnWidth}");
-            }
-            foreach (var field in typeof(T).GetFields())
-            {
-                if ((field.GetValue(obj)?.ToString()
-                     ?? string.Empty).Length > ColumnWidth)
-                {
-                    sb.Append($"| {(field.GetValue(obj)?.ToString()
-                                  ?? string.Empty).Substring(0, ColumnWidth - 3)}...");
-                    continue;
-                }
-                sb.Append($"| {field.GetValue(obj)?.ToString()
-                              ?? string.Empty, -ColumnWidth}");
-            }
+            sb.AppendLine(AddPropertyToColumns(obj));
+            sb.AppendLine(AddFieldsToColumns(obj));
             sb.AppendLine("|");
         }
+
         sb.AppendLine(new string('-', lineWidth));
         return sb.ToString();
     }
@@ -74,55 +37,124 @@ public class TableGenerator : IOutputFormatter
     public string CreateForOneObject<T>(T tObject)
     {
         var sb = new StringBuilder(200);
-        sb.AppendLine(new string('-', (ColumnWidthForOneObject + Space * 2) * 2 + SplitStick * 3));
+        sb.AppendLine(GetLineForOne());
 
-        foreach (var field in typeof(T).GetProperties())
-        {
-            if (field.Name.Length > ColumnWidthForOneObject)
-            {
-                sb.Append($"| {field.Name.Substring(0, ColumnWidthForOneObject - 3)}...");
-            }
-            else
-            {
-                sb.Append($"| {field.Name,-ColumnWidthForOneObject} ");
-            }
-            if ((field.GetValue(tObject)?.ToString()
-                 ?? string.Empty).Length > ColumnWidthForOneObject)
-            {
-                sb.AppendLine($"| {(field.GetValue(tObject)?.ToString()
-                                ?? string.Empty).Substring(0, ColumnWidthForOneObject - 3)}... |");
-            }
-            else
-            {
-                sb.AppendLine($"| {field.GetValue(tObject)?.ToString()
-                                   ?? string.Empty,-ColumnWidthForOneObject} |");
-            }
-        }
+        AddPropertyLines(tObject, sb);
+        AddFieldLines(tObject, sb);
 
-        foreach (var field in typeof(T).GetFields())
-        {
-            if (field.Name.Length > ColumnWidthForOneObject)
-            {
-                sb.Append($"| {field.Name.Substring(0, ColumnWidthForOneObject - 3)}...");
-            }
-            else
-            {
-                sb.AppendLine($"| {field.Name,-ColumnWidthForOneObject} ");
-            }
-            if ((field.GetValue(tObject)?.ToString()
-                 ?? string.Empty).Length > ColumnWidthForOneObject)
-            {
-                sb.AppendLine($"| {(field.GetValue(tObject)?.ToString()
-                                ?? string.Empty).Substring(0, ColumnWidthForOneObject - 3)}... |");
-            }
-            else
-            {
-                sb.AppendLine($"| {field.GetValue(tObject)?.ToString()
-                                   ?? string.Empty,-ColumnWidthForOneObject} |");
-            }
-        }
-    
-        sb.AppendLine(new string('-', (ColumnWidthForOneObject + Space * 2) * 2 + SplitStick * 3));
+        sb.AppendLine(GetLineForOne());
         return sb.ToString();
+    }
+
+    // For List.
+    
+    private int GetWidthForList<T>()
+    {
+        var lineWidth = typeof(T).GetProperties().Length * 
+                        (ColumnWidth + Space + SeparatorStick);
+        lineWidth += typeof(T).GetFields().Length * 
+                     (ColumnWidth + Space + SeparatorStick);
+        lineWidth += SeparatorStick;
+        return lineWidth;
+    }
+
+    private string CreateHeaders<T>()
+    {
+        var header = new StringBuilder();
+        foreach (var field in typeof(T).GetProperties().Concat<MemberInfo>(typeof(T).GetFields()))
+        {
+            var fieldName = field.Name.Length > ColumnWidth
+                ? $"{field.Name.Substring(0, ColumnWidth - 3)}..."
+                : field.Name;
+            header.Append($"| {fieldName, -ColumnWidth}");
+        }
+        header.Append("|");
+        return header.ToString();
+    }
+
+    private string AddPropertyToColumns<T>(T obj)
+    {
+        var sb = new StringBuilder();
+        foreach (var member in typeof(T).GetProperties())
+        {
+            var value = "";
+            if((member.GetValue(obj)?.ToString() ?? string.Empty).Length > ColumnWidth)
+            {
+                value = (member.GetValue(obj)?.ToString()
+                            ?? string.Empty)
+                    .Substring(0, ColumnWidth - 3); // leave 3 for dot.
+                value += "...";
+            }
+            else
+            {
+                value = member.GetValue(obj)?.ToString() 
+                        ?? string.Empty;
+            }
+
+            sb.Append($"| {value,-ColumnWidth}");
+        }
+
+        return sb.ToString();
+    }
+    
+    private string AddFieldsToColumns<T>(T obj)
+    {
+        var sb = new StringBuilder();
+        foreach (var member in typeof(T).GetFields())
+        {
+            var value = "";
+            if((member.GetValue(obj)?.ToString() ?? string.Empty).Length > ColumnWidth)
+            {
+                value = (member.GetValue(obj)?.ToString()
+                         ?? string.Empty)
+                    .Substring(0, ColumnWidth - 3); // leave 3 for dot.
+                value += "...";
+            }
+            else
+            {
+                value = member.GetValue(obj)?.ToString() 
+                        ?? string.Empty;
+            }
+
+            sb.Append($"| {value,-ColumnWidth}");
+        }
+
+        return sb.ToString();
+    }
+    
+    // For one object.
+    
+    private string GetLineForOne()
+    {
+        return new string('-', (ColumnWidthForOneObject + Space * 2) * 2 + SeparatorStick * 3);
+    }
+
+    private void AddPropertyLines<T>(T tObject, StringBuilder sb)
+    {
+        foreach (var member in typeof(T).GetProperties())
+        {
+            AddLineForMemberForOne(member.Name, member.GetValue(tObject)?.ToString() ?? string.Empty, sb);
+        }
+    }
+
+    private void AddFieldLines<T>(T tObject, StringBuilder sb)
+    {
+        foreach (var member in typeof(T).GetFields())
+        {
+            AddLineForMemberForOne(member.Name, member.GetValue(tObject)?.ToString() ?? string.Empty, sb);
+        }
+    }
+
+    private void AddLineForMemberForOne(string name, string value, StringBuilder sb)
+    {
+        var formattedValue = 
+            value.Length > ColumnWidthForOneObject 
+                ? value.Substring(0, ColumnWidthForOneObject - 3) + "..." 
+                : value;
+
+        sb.AppendFormat("| {0,-" + ColumnWidthForOneObject + "} | {1,-" + ColumnWidthForOneObject + "} |\n", 
+            name.Length > ColumnWidthForOneObject 
+                ? name.Substring(0, ColumnWidthForOneObject - 3) + "..."
+                : name, formattedValue);
     }
 }

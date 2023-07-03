@@ -3,13 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using ZenTotem.Core;
 using ZenTotem.Infrastructure;
 
-var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory())
-    .AddJsonFile("appsettings.json");
-var configuration = builder.Build();
 
 var startup = Startup.GetStartup();
-var serviceProvider = startup.Configure(configuration);
+var serviceProvider = startup.Configure();
 
 try
 {

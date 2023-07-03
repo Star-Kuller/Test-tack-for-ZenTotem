@@ -5,7 +5,7 @@ public class ErrorHandler : IErrorHandler
     private readonly ILogger? _logger;
     private readonly IOutput _output;
 
-    public ErrorHandler(ILogger logger, IOutput output)
+    public ErrorHandler(IOutput output, ILogger? logger = null)
     {
         _logger = logger;
         _output = output;

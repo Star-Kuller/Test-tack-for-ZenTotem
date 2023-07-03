@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ZenTotem.Core;
 using ZenTotem.Core.Parser;
@@ -17,7 +16,7 @@ public class Startup
         return _startup;
     }
 
-    public ServiceProvider Configure(IConfigurationRoot configuration)
+    public ServiceProvider Configure()
     {
         if (!File.Exists("appsettings.json"))
         {
@@ -28,6 +27,7 @@ public class Startup
                 writer.WriteLineAsync("{\"jsonFilePath\": \"/Employees.json\"}");
             }
         }
+
         var service = new ServiceCollection()
             .AddSingleton<IRepository, JsonRepository>()
             .AddSingleton<IParser, Parser>()
@@ -42,8 +42,6 @@ public class Startup
             .AddTransient<GetAllCommand>()
             .AddTransient<UpdateCommand>()
             .BuildServiceProvider();
-        
-        service.GetService<JsonRepository>().JsonPath = configuration["jsonFilePath"];
         
         var dictionaryCommands = new Dictionary<string, ICommand>
         {

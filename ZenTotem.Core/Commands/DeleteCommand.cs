@@ -29,6 +29,6 @@ public class DeleteCommand : ICommand
             throw new Exception("Error: Wrong id format");
         
         _repository.Delete(deleteId);
-        _output.Send($"Deleted employee {deleteId}");
+        _output.Send($"Deleted employee ID:{deleteId}");
     }
 }

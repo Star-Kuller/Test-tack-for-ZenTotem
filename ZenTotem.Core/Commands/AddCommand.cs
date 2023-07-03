@@ -36,6 +36,6 @@ public class AddCommand : ICommand
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Add(employee);
-        _output.Send($"Added Added employee {employee.Id}");
+        _output.Send($"Added Added employee ID:{employee.Id}");
     }
 }

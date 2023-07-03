@@ -43,6 +43,6 @@ public class UpdateCommand : ICommand
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Update(employee);
-        _output.Send($"Updated {employee.Id}");
+        _output.Send($"Updated ID:{employee.Id}");
     }
 }
