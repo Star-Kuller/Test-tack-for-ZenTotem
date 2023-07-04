@@ -12,7 +12,7 @@ public class HelpCommand : ICommand
     }
 
     private const string HelpMessage =
-        "-help - Prints a list of commands to the console.\n" +
+        "\n-help - Prints a list of commands to the console.\n" +
         "-json path:{path} [name:{name}] - Specifies the path to the json file or creates one.\n" +
         "-get id:{id} - Displays employee with id == {id}\n" +
         "-getAll - Displays all employees" +

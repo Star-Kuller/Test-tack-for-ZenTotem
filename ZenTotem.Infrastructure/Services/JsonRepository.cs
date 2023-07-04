@@ -74,7 +74,7 @@ public class JsonRepository : IRepository
         var employee = from e in employees
             where e.Id == id
             select e;
-        if (employees.Count < 1)
+        if (!employee.Any())
             throw new Exception("Error: Employee not found");
         return employee.First();
     }

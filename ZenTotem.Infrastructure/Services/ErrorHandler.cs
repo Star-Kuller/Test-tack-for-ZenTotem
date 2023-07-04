@@ -50,7 +50,7 @@ public class ErrorHandler : IErrorHandler
             returnedMessage = NumberOfArguments();
         if (message == "Error: FirstName must be entered") 
             returnedMessage = NoFirstName();
-        
+
         if (returnedMessage == "")
             returnedMessage = Unrecognized(message);
         if(_logger is not null) 
