@@ -35,8 +35,8 @@ public class TableGenerator : IOutputFormatter
         // Create rows.
         foreach (var obj in list)
         {
-            sb.AppendLine(AddPropertyToColumns(obj));
-            sb.AppendLine(AddFieldsToColumns(obj));
+            sb.Append(AddPropertyToColumns(obj));
+            sb.Append(AddFieldsToColumns(obj));
             sb.AppendLine("|");
         }
 
