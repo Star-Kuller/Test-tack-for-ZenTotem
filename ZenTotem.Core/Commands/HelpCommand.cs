@@ -8,7 +8,7 @@ public class HelpCommand : ICommand
 
     public HelpCommand(IOutput output)
     {
-        _output = output;
+        _output = output ?? throw new ArgumentNullException(nameof(output));
     }
 
     private const string HelpMessage =

@@ -17,9 +17,7 @@ public class Startup
     private Startup(){}
     public static Startup GetStartup()
     {
-        if (_startup == null)
-            _startup = new Startup();
-        return _startup;
+        return _startup ?? (_startup = new Startup());
     }
 
     /// <summary>

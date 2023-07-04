@@ -10,8 +10,8 @@ public class AddCommand : ICommand
 
     public AddCommand(IRepository repository, IOutput output)
     {
-        _repository = repository;
-        _output = output;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _output = output ?? throw new ArgumentNullException(nameof(output));
     }
 
     public void Execute(List<string> arguments)
@@ -36,6 +36,6 @@ public class AddCommand : ICommand
             throw new Exception("Error: FirstName must be entered");
 
         _repository.Add(employee);
-        _output.Send($"Added Added employee ID:{employee.Id}");
+        _output.Send($"Added employee ID:{employee.Id}");
     }
 }

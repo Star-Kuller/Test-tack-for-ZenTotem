@@ -10,7 +10,7 @@ public class JsonCommand : ICommand
 
     public JsonCommand(IOutput output)
     {
-        _output = output;
+        _output = output ?? throw new ArgumentNullException(nameof(output));
     }
 
     public void Execute(List<string> arguments)

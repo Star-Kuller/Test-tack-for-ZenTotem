@@ -9,8 +9,8 @@ public class DeleteCommand : ICommand
 
     public DeleteCommand(IRepository repository, IOutput output)
     {
-        _repository = repository;
-        _output = output;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _output = output ?? throw new ArgumentNullException(nameof(output));
     }
     
     public void Execute(List<string> arguments)

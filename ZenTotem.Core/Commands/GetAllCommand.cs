@@ -10,9 +10,9 @@ public class GetAllCommand : ICommand
 
     public GetAllCommand(IRepository repository, IOutputFormatter outputFormatter, IOutput output)
     {
-        _repository = repository;
-        _outputFormatter = outputFormatter;
-        _output = output;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _outputFormatter = outputFormatter ?? throw new ArgumentNullException(nameof(outputFormatter));
+        _output = output ?? throw new ArgumentNullException(nameof(output));
     }
     
     public void Execute(List<string> arguments)

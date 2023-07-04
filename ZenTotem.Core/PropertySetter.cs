@@ -14,6 +14,8 @@ public static class PropertySetter
     /// <returns>Employee with entered fields.</returns>
     public static Employee SetProperties(string argument, Employee employee)
     {
+        if (employee == null)
+            throw new Exception("Error: No employee for set properties");
         switch (argument.Split(':')[0].ToLower())
         {
             case "id":
