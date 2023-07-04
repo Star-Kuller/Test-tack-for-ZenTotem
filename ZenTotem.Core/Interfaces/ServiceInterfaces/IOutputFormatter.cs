@@ -22,5 +22,5 @@ public interface IOutputFormatter
     /// <param name="tObject">The object instance for which the table will be generated.</param>
     /// <typeparam name="T">Object type of generated table.</typeparam>
     /// <returns>The string representation of the table.</returns>
-    public string CreateForOneObject<T>(T employee);
+    public string CreateForOneObject<T>(T obj);
 }

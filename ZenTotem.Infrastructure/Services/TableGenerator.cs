@@ -47,16 +47,16 @@ public class TableGenerator : IOutputFormatter
     /// <summary>
     /// Creates a table with fields and properties in the first column and their values in the second.
     /// </summary>
-    /// <param name="tObject">The object instance for which the table will be generated.</param>
+    /// <param name="obj">The object instance for which the table will be generated.</param>
     /// <typeparam name="T">Object type of generated table.</typeparam>
     /// <returns>The string representation of the table.</returns>
-    public string CreateForOneObject<T>(T tObject)
+    public string CreateForOneObject<T>(T obj)
     {
         var sb = new StringBuilder(200);
         sb.AppendLine(GetLineForOne());
 
-        AddPropertyLines(tObject, sb);
-        AddFieldLines(tObject, sb);
+        AddPropertyLines(obj, sb);
+        AddFieldLines(obj, sb);
 
         sb.AppendLine(GetLineForOne());
         return sb.ToString();
