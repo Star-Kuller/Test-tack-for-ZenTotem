@@ -3,11 +3,17 @@ using ZenTotem.Core;
 using ZenTotem.Core.Parser;
 
 namespace ZenTotem.Infrastructure;
+
+/// <summary>
+/// This class defines the parameters and necessary relationships in the application.
+/// </summary>
 public class Startup
 {
     private static Startup? _startup;
 
-    // Singleton.
+    /// <summary>
+    /// Lets get a singleton instance.
+    /// </summary>
     private Startup(){}
     public static Startup GetStartup()
     {
@@ -16,6 +22,15 @@ public class Startup
         return _startup;
     }
 
+    /// <summary>
+    /// Creates the "Appsettings.json" file if it has been removed.
+    /// Creates a DI container.
+    /// Creates a dictionary of command and key mappings.
+    /// </summary>
+    /// <returns>
+    /// An object of type ServiceProvider.
+    /// Needed to get the classes in the DI container.
+    /// </returns>
     public ServiceProvider Configure()
     {
         if (!File.Exists("appsettings.json"))

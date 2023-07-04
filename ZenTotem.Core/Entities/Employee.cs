@@ -2,6 +2,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ZenTotem.Core.Entities;
 
+/// <summary>
+/// This is the class that represents an employee.
+/// </summary>
 public class Employee
 {
     public Employee(int id)

@@ -1,9 +1,17 @@
 using ZenTotem.Core.Entities;
 
 namespace ZenTotem.Core.Parser;
-
+/// <summary>
+/// A class for writing values to the fields and properties of the employee class by the corresponding key.
+/// </summary>
 public static class PropertySetter
 {
+    /// <summary>
+    /// Gets an attribute and writes its value to the corresponding field.
+    /// </summary>
+    /// <param name="argument">Argument in the format {name}:{value}</param>
+    /// <param name="employee">The employee being manipulated.</param>
+    /// <returns>Employee with entered fields.</returns>
     public static Employee SetProperties(string argument, Employee employee)
     {
         switch (argument.Split(':')[0].ToLower())

@@ -1,5 +1,8 @@
 namespace ZenTotem.Core.Parser;
 
+/// <summary>
+/// Gets the command name and selects the appropriate class. Many different implementations can be made.
+/// </summary>
 public class Parser : IParser
 {
     public Dictionary<string, ICommand> DictionaryCommands { get; set; }

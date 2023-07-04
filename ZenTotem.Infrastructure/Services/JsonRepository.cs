@@ -3,12 +3,15 @@ using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace ZenTotem.Infrastructure;
-
+/// <summary>
+/// A class that allows you to work with JSON. It is an implementation of the Repository pattern.
+/// </summary>
 public class JsonRepository : IRepository
 {
     public string JsonPath;
     private readonly ILogger? _logger;
-
+    
+    /// <param name="logger">Optional. Allows you to enable logging.</param>
     public JsonRepository(ILogger? logger = null)
     {
         _logger = logger;
@@ -19,6 +22,9 @@ public class JsonRepository : IRepository
         JsonPath = configuration["jsonFilePath"];
     }
     
+    /// <summary>
+    /// Adds a new employee to the JSON file.
+    /// </summary>
     public void Add(Employee employee)
     {
         var employees = Deserialize() ?? new List<Employee>();
@@ -27,7 +33,10 @@ public class JsonRepository : IRepository
         if (_logger is not null)
             _logger.LogInfo($"Added employee: {employee.Id}");
     }
-
+    
+    /// <summary>
+    /// Updates an employee in a JSON file.
+    /// </summary>
     public void Update(Employee employee)
     {
         var employees = Deserialize() ?? new List<Employee>();
@@ -40,6 +49,9 @@ public class JsonRepository : IRepository
             _logger.LogInfo($"Updated employee: {employee.Id}");
     }
 
+    /// <summary>
+    /// Removes an employee from the JSON file.
+    /// </summary>
     public void Delete(int id)
     {
         var employees = Deserialize()
@@ -52,6 +64,9 @@ public class JsonRepository : IRepository
             _logger.LogInfo($"Removed employee: {employee.Id}");
     }
 
+    /// <summary>
+    /// Gets the employee with the specified ID.
+    /// </summary>
     public Employee Get(int id)
     {
         var employees = Deserialize()
@@ -64,6 +79,9 @@ public class JsonRepository : IRepository
         return employee.First();
     }
 
+    /// <summary>
+    /// Gets a list of all employees.
+    /// </summary>
     public List<Employee> GetAll()
     {
         return Deserialize() ?? throw new Exception("Error: File is empty");

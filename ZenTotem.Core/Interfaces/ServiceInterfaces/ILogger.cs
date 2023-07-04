@@ -1,5 +1,8 @@
 namespace ZenTotem.Infrastructure;
 
+/// <summary>
+/// Allows you to log everything that happens in the program.
+/// </summary>
 public interface ILogger
 {
     void LogInfo(string message);

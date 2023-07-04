@@ -1,16 +1,27 @@
 namespace ZenTotem.Infrastructure;
 
+/// <summary>
+/// Receives an error and takes the necessary action.
+/// Here it is possible to make a self-diagnosis with subsequent correction.
+/// </summary>
 public class ErrorHandler : IErrorHandler
 {
     private readonly ILogger? _logger;
     private readonly IOutput _output;
-
+    
+    /// <param name="output">An object that allows you to output the result of processing to the console or other outputs.</param>
+    /// <param name="logger">Optional. Allows you to enable logging.</param>
     public ErrorHandler(IOutput output, ILogger? logger = null)
     {
         _logger = logger;
         _output = output;
     }
 
+    /// <summary>
+    /// Takes action according to the error and displays a message.
+    /// </summary>
+    /// <param name="ex">The error to be handled.</param>
+    /// <param name="message">Error message.</param>
     public void HandleError(Exception ex, string message)
     {
         var returnedMessage = "";
