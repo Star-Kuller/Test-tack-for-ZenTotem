@@ -17,7 +17,7 @@ public class DeleteCommand : ICommand
     {
         if (arguments.Count != 1)
             throw new Exception("Error: Wrong number of arguments");
-        if (!arguments[0].Contains("id:"))
+        if (!arguments[0].Contains("id:",StringComparison.InvariantCultureIgnoreCase))
             throw new Exception("Error: Invalid syntax");
         
         var allEmployees = _repository.GetAll();
@@ -25,7 +25,8 @@ public class DeleteCommand : ICommand
         if (allEmployees.Count < 1)
             throw new Exception("Error: No employees in the file");
 
-        if (!int.TryParse(arguments[0].Replace("id:", ""), out var deleteId))
+        if (!int.TryParse(arguments[0].Replace("id:", "",
+                StringComparison.InvariantCultureIgnoreCase), out var deleteId))
             throw new Exception("Error: Wrong id format");
         
         _repository.Delete(deleteId);

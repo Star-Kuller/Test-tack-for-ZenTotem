@@ -64,7 +64,7 @@ public class ErrorHandler : IErrorHandler
     private string CommandNotRecognized() => "The command is not recognized.\n\"-help\" - list of commands.";
     private string IdLessZero() => "ID must be greater than 0.";
     private string IdFormat() => "ID must be an integer.";
-    private string DecimalFormat() => "The number must be entered in the format \"[integer],[fractional]\".";
+    private string DecimalFormat() => "The number must be entered in the format '[integer],[fractional]'.";
     private string NoEmployees() => "Employee not found.";
     private string InvalidSyntax() => "You made a mistake in writing the command.";
     private string NumberOfArguments() => "This method has a different number of arguments.\nYou may have accidentally put a space between the ':'.";

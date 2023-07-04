@@ -31,6 +31,7 @@ public static class PropertySetter
             case "salary":
                 var salary = argument.Replace("Salary:", "",
                     StringComparison.InvariantCultureIgnoreCase);
+                salary = salary.Replace(".", ",");
                 if (!decimal.TryParse(salary, out var d))
                     throw new Exception("Error: Wrong decimal format");
                 employee.Salary = d;

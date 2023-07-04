@@ -91,9 +91,21 @@ public class JsonRepository : IRepository
     
     private List<Employee>? Deserialize()
     {
-        using (FileStream fs = new FileStream(JsonPath, FileMode.OpenOrCreate))
+        try
         {
-            return JsonSerializer.Deserialize<List<Employee>>(fs);
+            using (FileStream fs = new FileStream(JsonPath, FileMode.OpenOrCreate))
+            {
+                return JsonSerializer.Deserialize<List<Employee>>(fs);
+            }
+        }
+        catch (Exception e)
+        {
+            Serialize(new List<Employee>());
+            using (FileStream fs = new FileStream(JsonPath, FileMode.OpenOrCreate))
+            {
+                return JsonSerializer.Deserialize<List<Employee>>(fs);
+            }
+            throw;
         }
     }
     

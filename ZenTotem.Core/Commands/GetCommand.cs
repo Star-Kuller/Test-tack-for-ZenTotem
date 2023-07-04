@@ -19,10 +19,11 @@ public class GetCommand : ICommand
     {
         if (arguments.Count != 1)
             throw new Exception("Error: Wrong number of arguments");
-        if (!arguments[0].Contains("id:"))
+        if (!arguments[0].Contains("id:",StringComparison.InvariantCultureIgnoreCase))
             throw new Exception("Error: Invalid syntax");
         
-        if (!int.TryParse(arguments[0].Replace("id:", ""), out var id))
+        if (!int.TryParse(arguments[0].Replace("id:", ""
+                ,StringComparison.InvariantCultureIgnoreCase), out var id))
             throw new Exception("Error: Wrong id format");
         
         var employee = _repository.Get(id);
